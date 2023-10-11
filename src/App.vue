@@ -21,7 +21,8 @@ function loadRecords() {
 
   const params = {
     _start: (pagination.value.page - 1) * pagination.value.perPage,
-    _limit: pagination.value.perPage
+    _limit: pagination.value.perPage,
+    q: query.value
   };
 
   axios
@@ -52,6 +53,16 @@ function loadNextPage() {
   loadRecords();
 }
 
+const query = ref(null);
+
+function handleSearchInput(value) {
+  query.value = value;
+
+  pagination.value = Object.assign({}, { page: 1, perPage: 10, total: 100 });
+
+  loadRecords();
+}
+
 onMounted(() => {
   loadRecords();
 });
@@ -67,7 +78,12 @@ onMounted(() => {
   </header> -->
 
   <main>
-    <PaginatedAutocomplete :items="records" :loading="loading" @intersect="loadNextPage" />
+    <PaginatedAutocomplete
+      :items="records"
+      :loading="loading"
+      @intersect="loadNextPage"
+      @update:search-input="handleSearchInput"
+    />
   </main>
 </template>
 

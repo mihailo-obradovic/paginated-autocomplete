@@ -5,6 +5,9 @@
     :menu-props="{ maxWidth: 300 }"
     class="autocomplete"
     clearable
+    no-filter
+    v-model:search-input="search"
+    @update:search="emitSearch"
   >
     <template #append-item>
       <template v-if="!!items.length">
@@ -17,6 +20,8 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 defineProps({
   items: {
     type: Array,
@@ -29,12 +34,18 @@ defineProps({
   }
 });
 
-const emit = defineEmits(['intersect']);
+const emit = defineEmits(['intersect', 'update:search-input']);
 
 function handleIntersection(isIntersecting) {
   if (isIntersecting) {
     emit('intersect');
   }
+}
+
+const search = ref(null);
+
+function emitSearch(value) {
+  emit('update:search-input', value);
 }
 </script>
 
