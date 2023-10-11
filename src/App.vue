@@ -1,11 +1,27 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
 // import HelloWorld from './components/HelloWorld.vue';
 // import TheWelcome from './components/TheWelcome.vue';
 import PaginatedAutocomplete from './components/PaginatedAutocomplete.vue';
 
 const records = ref([]);
+
+function loadRecords() {
+  axios
+    .get('https://jsonplaceholder.typicode.com/posts')
+    .then((response) => {
+      records.value = response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+onMounted(() => {
+  loadRecords();
+});
 </script>
 
 <template>
