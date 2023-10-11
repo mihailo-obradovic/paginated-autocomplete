@@ -1,5 +1,11 @@
 <template>
-  <v-autocomplete :items="items" :menu-props="{ maxWidth: 300 }" class="autocomplete">
+  <v-autocomplete
+    :items="items"
+    :loading="loading"
+    :menu-props="{ maxWidth: 300 }"
+    class="autocomplete"
+    clearable
+  >
     <!--  -->
   </v-autocomplete>
 </template>
@@ -9,6 +15,11 @@ defineProps({
   items: {
     type: Array,
     required: true
+  },
+
+  loading: {
+    type: Boolean,
+    required: false
   }
 });
 </script>

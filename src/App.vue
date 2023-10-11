@@ -8,7 +8,11 @@ import PaginatedAutocomplete from './components/PaginatedAutocomplete.vue';
 
 const records = ref([]);
 
+const loading = ref(false);
+
 function loadRecords() {
+  loading.value = true;
+
   axios
     .get('https://jsonplaceholder.typicode.com/posts')
     .then((response) => {
@@ -16,6 +20,9 @@ function loadRecords() {
     })
     .catch((error) => {
       console.log(error);
+    })
+    .finally(() => {
+      loading.value = false;
     });
 }
 
@@ -34,8 +41,7 @@ onMounted(() => {
   </header> -->
 
   <main>
-    <!-- <TheWelcome /> -->
-    <PaginatedAutocomplete :items="records" />
+    <PaginatedAutocomplete :items="records" :loading="loading" />
   </main>
 </template>
 
