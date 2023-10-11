@@ -28,11 +28,13 @@ function loadRecords() {
   axios
     .get('https://jsonplaceholder.typicode.com/posts', { params })
     .then((response) => {
+      const recordsToAdd = response.data.filter((post) => post.title.includes(params.q || ''));
+
       if (pagination.value.page === 1) {
-        records.value = response.data;
+        records.value = recordsToAdd;
         pagination.value.total = response.headers['x-total-count'];
       } else {
-        records.value = [...records.value, ...response.data];
+        records.value = [...records.value, ...recordsToAdd];
       }
     })
     .catch((error) => {
