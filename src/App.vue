@@ -58,12 +58,18 @@ function loadNextPage() {
 const query = ref(null);
 
 function handleSearchInput(value) {
+  if (selectedRecord.value === value) {
+    return;
+  }
+
   query.value = value;
 
   pagination.value = Object.assign({}, { page: 1, perPage: 10, total: 100 });
 
   loadRecords();
 }
+
+const selectedRecord = ref(null);
 
 onMounted(() => {
   loadRecords();
@@ -81,6 +87,7 @@ onMounted(() => {
 
   <main>
     <PaginatedAutocomplete
+      v-model="selectedRecord"
       :items="records"
       :loading="loading"
       @intersect="loadNextPage"

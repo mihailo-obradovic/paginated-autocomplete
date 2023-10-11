@@ -3,10 +3,12 @@
     :items="items"
     :loading="loading"
     :menu-props="{ maxWidth: 300 }"
+    :model-value="selectedItem"
     class="autocomplete"
     clearable
     no-filter
     v-model:search-input="search"
+    @update:model-value="emitSelection"
     @update:search="emitSearch"
   >
     <template #append-item>
@@ -35,12 +37,20 @@ defineProps({
   }
 });
 
-const emit = defineEmits(['intersect', 'update:search-input']);
+const emit = defineEmits(['intersect', 'update:model-value', 'update:search-input']);
 
 function handleIntersection(isIntersecting) {
   if (isIntersecting) {
     emit('intersect');
   }
+}
+
+const selectedItem = ref(null);
+
+function emitSelection(value) {
+  selectedItem.value = value;
+
+  emit('update:model-value', value);
 }
 
 const search = ref(null);
