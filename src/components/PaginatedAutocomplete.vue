@@ -6,7 +6,13 @@
     class="autocomplete"
     clearable
   >
-    <!--  -->
+    <template #append-item>
+      <template v-if="!!items.length">
+        <div v-if="!loading" v-intersect="handleIntersection" />
+
+        <div v-else class="px-4 py-3 text-primary">Loading more...</div>
+      </template>
+    </template>
   </v-autocomplete>
 </template>
 
@@ -22,6 +28,14 @@ defineProps({
     required: false
   }
 });
+
+const emit = defineEmits(['intersect']);
+
+function handleIntersection(isIntersecting) {
+  if (isIntersecting) {
+    emit('intersect');
+  }
+}
 </script>
 
 <style lang="scss" scoped>

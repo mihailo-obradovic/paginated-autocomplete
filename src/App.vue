@@ -27,8 +27,12 @@ function loadRecords() {
   axios
     .get('https://jsonplaceholder.typicode.com/posts', { params })
     .then((response) => {
-      records.value = response.data;
-      pagination.value.total = response.headers['x-total-count'];
+      if (pagination.value.page === 1) {
+        records.value = response.data;
+        pagination.value.total = response.headers['x-total-count'];
+      } else {
+        records.value = [...records.value, ...response.data];
+      }
     })
     .catch((error) => {
       console.log(error);
@@ -36,6 +40,16 @@ function loadRecords() {
     .finally(() => {
       loading.value = false;
     });
+}
+
+function loadNextPage() {
+  if (pagination.value.page * pagination.value.perPage >= pagination.value.total) {
+    return;
+  }
+
+  pagination.value.page++;
+
+  loadRecords();
 }
 
 onMounted(() => {
@@ -53,7 +67,7 @@ onMounted(() => {
   </header> -->
 
   <main>
-    <PaginatedAutocomplete :items="records" :loading="loading" />
+    <PaginatedAutocomplete :items="records" :loading="loading" @intersect="loadNextPage" />
   </main>
 </template>
 
