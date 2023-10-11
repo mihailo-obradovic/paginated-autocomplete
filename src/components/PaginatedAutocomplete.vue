@@ -2,7 +2,7 @@
   <v-autocomplete
     :items="items"
     :loading="loading"
-    :menu-props="{ maxWidth: 300 }"
+    :menu-props="{ maxWidth: 300, class: `dropdown-${uid}` }"
     :model-value="selectedItem"
     class="autocomplete"
     clearable
@@ -57,10 +57,23 @@ const search = ref(null);
 
 const debouncedEmit = debounce((value) => {
   emit('update:search-input', value);
+
+  resetDropdownScroll();
 }, 500);
 
 function emitSearch(value) {
   debouncedEmit(value);
+}
+
+const uid = Math.round(Math.random() * 10e4);
+
+function resetDropdownScroll() {
+  const menuWrapper = document.getElementsByClassName(`dropdown-${uid}`)[0];
+  const menuList = menuWrapper?.firstElementChild?.firstElementChild;
+
+  if (menuList) {
+    menuList.scrollTop = 0;
+  }
 }
 </script>
 
