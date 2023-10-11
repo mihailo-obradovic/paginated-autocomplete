@@ -10,13 +10,25 @@ const records = ref([]);
 
 const loading = ref(false);
 
+const pagination = ref({
+  page: 1,
+  perPage: 10,
+  total: 100
+});
+
 function loadRecords() {
   loading.value = true;
 
+  const params = {
+    _start: (pagination.value.page - 1) * pagination.value.perPage,
+    _limit: pagination.value.perPage
+  };
+
   axios
-    .get('https://jsonplaceholder.typicode.com/posts')
+    .get('https://jsonplaceholder.typicode.com/posts', { params })
     .then((response) => {
       records.value = response.data;
+      pagination.value.total = response.headers['x-total-count'];
     })
     .catch((error) => {
       console.log(error);
