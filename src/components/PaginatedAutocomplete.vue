@@ -21,6 +21,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import debounce from 'lodash/debounce';
 
 defineProps({
   items: {
@@ -44,8 +45,12 @@ function handleIntersection(isIntersecting) {
 
 const search = ref(null);
 
-function emitSearch(value) {
+const debouncedEmit = debounce((value) => {
   emit('update:search-input', value);
+}, 500);
+
+function emitSearch(value) {
+  debouncedEmit(value);
 }
 </script>
 
